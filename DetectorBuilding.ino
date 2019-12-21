@@ -1,15 +1,20 @@
- //Variables
+ //Variables & Libaries
+  #include <ExtendedADCShield.h>
+  #include <SPI.h>
+  ExtendedADCShield extendedADCShield(16);
+
   float resistorT=0;  //Thermistor resistance (we are trying to find this)
   float voltageT=0;  //Voltage drop through resistorT
   float resistorK=22000.0;  //Known resistance
   float voltageK=0.0;  //Voltage drop through resistorK
   float voltageS=5.0;  //Source voltage
   float analogVoltagePin=A0;
-
+  float ch0;
+  
 void setup() {
   Serial.begin(9600);
- 
-  
+  SPI.begin();
+  extendedADCShield.analogReadConfigNext(0, SINGLE_ENDED, UNIPOLAR, RANGE5V);
 }
 
 
@@ -20,13 +25,16 @@ float voltageDivider(float Rk,float Vs,float Vk)  //returns the value for a unkn
 
 
 void loop() {
-  float voltageDrop=analogRead(analogVoltagePin);
-  // voltageK=map(voltageDrop, 0.0, 1023.0, 0.0, 5.0);
-  voltageK = voltageDrop*5/1023;  //ghetto map
-  resistorT=voltageDivider(resistorK,voltageS,voltageK);
-  Serial.print(voltageK);  //Blue
-  Serial.print("\t");
-  Serial.println(resistorT);  //Red
+  ch0 =  extendedADCShield.analogReadConfigNext(0, SINGLE_ENDED, UNIPOLAR, RANGE5V);
+  Serial.println(ch0,4);
+  delay (1000);
 
-  delay(100);
+
+  
+  voltageK = ch0;
+  resistorT=voltageDivider(resistorK,voltageS,voltageK);
+//  Serial.print(voltageK);  //Blue
+//  Serial.print("\t");
+//  Serial.println(resistorT);  //Red
+//  delay(100);
 }
