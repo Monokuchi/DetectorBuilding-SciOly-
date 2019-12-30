@@ -2,13 +2,13 @@ import serial
 import sys
 from serial.tools.list_ports import comports
 import time
-
 import logging
+
 logger = logging.getLogger('simple_example')
 logger.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s \t %(message)s', "%Y-%m-%d %H:%M:%S")
+formatter = logging.Formatter('%(asctime)s.%(msecs)03d, %(message)s', "%Y-%m-%d %H:%M:%S")
 # create file handler which logs even debug messages
-fh = logging.FileHandler('C:\\temp\\arduino_adc.csv')
+fh = logging.FileHandler('C:\\Temp\\log.csv')
 fh.setLevel(logging.INFO)
 # create console handle
 ch = logging.StreamHandler()
@@ -36,7 +36,7 @@ class Communications:
             print(port)
         return ports
 
-    def openPort(self, port_name="COM3"):
+    def openPort(self, port_name="COM4"):
         self.SerialPort.port = port_name
         self.SerialPort.open()
 
